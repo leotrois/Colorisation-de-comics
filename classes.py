@@ -21,7 +21,7 @@ class CustomDataset(Dataset):
         img_path_bw= self.img_csv.iloc[index,1]
         img_path_couleur =self.img_csv.iloc[index,0]
         
-        wb, couleur =read_image(img_path_wb, mode = ImageReadMode.GRAY ), read_image(img_path_couleur)
+        wb, couleur =read_image(img_path_bw, mode = ImageReadMode.GRAY ), read_image(img_path_couleur)
         wb, couleur = self.transform(wb), self.transform(couleur)
 
         wb, couleur= (wb -127.5)/127.5, (couleur -127.5)/127.5 # We normalise the images
