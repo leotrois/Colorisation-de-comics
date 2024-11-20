@@ -6,21 +6,18 @@ import pandas as pd
 import matplotlib.pyplot  as plt
 from torchvision.utils import make_grid, save_image
 
-csv = pd.read_csv("dataset.csv")
-dataset_size = len(csv)
-print(dataset_size)
+
 train = TrainDataset("dataset.csv", "./Dataset", (256,256), len(csv))
 test = TestDataset("dataset.csv", "./Dataset", (256,256), len(csv))
 
-print (train.__getitem__(0))
 
-data =  DataLoader(train, batch_size= 128, shuffle= True)
+data =  DataLoader(train, batch_size= 512, shuffle= True)
 data_test = DataLoader(test, batch_size= 1, shuffle= True)
 for batch in data:
     print("batch",len(batch))
     break
-
-model = Pix2Pix()
+device = "cuda"
+model = Pix2Pix().to(device)
 
 for i in range(10):
     model.train(1, data)
