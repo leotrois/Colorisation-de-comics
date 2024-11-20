@@ -8,32 +8,36 @@ class down(nn.Module):
     
     def __init__(self,in_channels,out_channels) -> None:
         super().__init__()
-        self.couche1 = nn.Conv2d(in_channels=in_channels, out_channels= out_channels,kernel_size=3, stride=2, padding=1)
-        self.couche2 = nn.Conv2d(in_channels=out_channels, out_channels= out_channels,kernel_size=3, stride=2, padding=1)
-        
+        self.couche1 = nn.Conv2d(in_channels=in_channels, out_channels= out_channels,kernel_size=(3,3),  padding='same')
+        self.couche2 = nn.Conv2d(in_channels=out_channels, out_channels= out_channels,kernel_size=(3,3),  padding='same')
+        self.maxpool = nn.MaxPool2d(kernel_size=(2,2))
+        self.dropout = nn.Dropout(0.3)
     def forward(self,x):
         x = self.couche1(x)
-        x = self.nn.functional.leaky_relu(x)
+        x = nn.functional.leaky_relu(x)
         x = self.couche2(x)
-        return nn.functional.leaky_relu(x)
+        x = nn.functional.leaky_relu(x)
+        x = self.maxpool(x)
+        x = self.dropout(x)
+        return x
     
 
 
 class up(nn.Module):
-    def __init__(self,in_channel,out_channel) -> None:
+    def __init__(self,in_channel,out_channel, activation = True) -> None:
         super().__init__()
         self.activation = activation # Pour la dernière couche, on veut des valeurs entre -1 et 1
         self.couche = nn.ConvTranspose2d(in_channels=in_channel,out_channels=out_channel, kernel_size=(2,2), stride=2, padding='same')
         self.batch_norm = nn.BatchNorm2d(out_channel)
-        self.conv2d = nn.Conv2d(in_channels=out_channels, out_channels= out_channels,kernel_size=(2,2),  padding='same')
+        self.conv2d = nn.Conv2d(in_channels=out_channel, out_channels= out_channel,kernel_size=(2,2),  padding='same')
         
-    def forward(self,x, connection, activation = True):
+    def forward(self,x, connection):
         
-      x = self.couche(x)
+      x = self.couche(x) 
       x = self.conv2d(torch.cat([x , connection],dim=1))
       x = nn.functional.leaky_relu(x)
       x = self.conv2d(torch.cat([x , connection],dim=1))
-      if activation :
+      if self.activation :
         x = nn.functional.leaky_relu(x)
       else:
         x = 2* torch.nn.functional.sigmoid(x) -1
@@ -77,8 +81,8 @@ class Unet_with_add(nn.Module):
 class Unet_with_cat(nn.Module):
     def __init__(self,nb_features) -> None:
         super().__init__()
-        self.down1 = down(1,nb_features) 
-        self.down2 = down(nb_features,nb_features*2) 
+        self.down1 = down(1,nb_features)  
+        self.down2 = down(nb_features,nb_features*2)  
         self.down3 = down(nb_features * 2, nb_features* 4) 
 
         self.down4 = down(nb_features* 4, nb_features *8) 
@@ -86,20 +90,20 @@ class Unet_with_cat(nn.Module):
         self.up1 = up(nb_features *8, nb_features*4) 
         self.up2 = up(nb_features *4*2, nb_features*2) 
         self.up3 = up(nb_features *2*2, nb_features) 
-        self.up4 = up(nb_features*2, 3) 
+        self.up4 = up(nb_features*2, 3,activation=False) 
     
     def forward(self,x):
-        x = self.down1(x) 
+        x = self.down1(x) # (1,512,512) -> (64,256,256)
         x1 = x
-        x = self.down2(x) 
+        x = self.down2(x) # (64,256,256) -> (128,128,128)
         x2 = x
-        x = self.down3(x) 
+        x = self.down3(x) # (128,128,128) -> (256,64,64)
         x3 = x
-        x = self.down4(x) 
-        x = self.up1(x) 
-        x = self.up2(x,x3) 
-        x = self.up3(x,x2) 
-        x = self.up4(x,x1, activation = False) 
+        x = self.down4(x) # (256,64,64) -> (512,32,32)
+        x = self.up1(x) # (512,32,32) -> (256,64,64)
+        x = self.up2(x,x3) # (256,64,64) -> (128,128,128)
+        x = self.up3(x,x2) # (128,128,128) -> (64,256,256)
+        x = self.up4(x,x1) # (64,256,256) -> (3,512,512)
         return x
     
     def loss(self,real_images, fake_images, disc_pred,l1_loss, bce_loss):
