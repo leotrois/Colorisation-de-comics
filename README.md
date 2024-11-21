@@ -1,9 +1,8 @@
 # Implémentation de Pix2Pix
 
 Ce projet est une implémentation du modèle Pix2Pix, un réseau de neurones pour la traduction d'images par paires, tel que décrit dans le papier "Image-to-Image Translation with Conditional Adversarial Networks" par Isola et al. Nous allons utiliser ce modèle pour colorer des images de comics.
+![Results](images\results.jpg)
 
-## Prérequis
-Voir requirement
 ## Structure du projet
 
 - `train.py` : Script pour entraîner le modèle.
