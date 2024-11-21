@@ -8,7 +8,7 @@ Ce projet est une implémentation du modèle Pix2Pix, un réseau de neurones pou
 ## Structure du projet
 
 - `train.py` : Script pour entraîner le modèle.
-- `generate.py` : Script pour générer des images avec le modèle entraîné.
+- `infer.py` : Script pour générer des images avec le modèle entraîné.
 - `model.py` : Définition de l'architecture du modèle Pix2Pix.
 - `utils.py` : Fonctions utilitaires pour le traitement des données et l'entraînement.
 - `classes.py` : Définition des structures de dataloader corresspondant à notre jeu de donnée 
