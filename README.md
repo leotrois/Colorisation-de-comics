@@ -28,6 +28,7 @@ Le modèle Pix2Pix se compose de deux parties principales : un générateur et u
 
 ### Traitement des données
 Pour que le jeu de donnée soit compatible avec les fonction de création du jeu de donnée, le jeu de donnée doit avoir l'arborescence suivante :
+
 ![Data Tree](forme_jeu_donnee_avant_traitement.PNG)
 
 Sinon, vous pouvez utiliser un jeu de donnée qui a directement la forme suivante :
