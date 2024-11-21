@@ -28,10 +28,10 @@ Le modèle Pix2Pix se compose de deux parties principales : un générateur et u
 
 ### Traitement des données
 Pour que le jeu de donnée soit compatible avec les fonction de création du jeu de donnée, le jeu de donnée doit avoir l'arborescence suivante :
-![Data Tree](forme_jeu_donnee_avant_traitement.png)
+![Data Tree](forme_jeu_donnee_avant_traitement.PNG)
 
 Sinon, vous pouvez utiliser un jeu de donnée qui a directement la forme suivante :
-![Data Tree](forme_jeu_donnee.png)
+![Data Tree](forme_jeu_donnee.PNG)
 
 ### Jeu de donnée
 Par la suite, nous utilisons le jeu de donnée de comics des années 50 issu du papier ["The Amazing Mysteries of the Gutter: Drawing Inferences Between Panels in Comic Book Narratives"](https://arxiv.org/abs/1611.05118). Vous pouvez accéder au jeu de donnée via ce [lien](https://obj.umiacs.umd.edu/comics/index.html) (on utilise la version original panel images).
