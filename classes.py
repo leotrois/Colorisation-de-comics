@@ -12,7 +12,7 @@ class CustomDataset(Dataset):
         self.img_csv = pd.read_csv(img_csv) 
         self.transform = torchvision.transforms.Resize(img_size)
         self.device = device
-        
+    
     def __len__(self):
 
         return len(self.img_csv)
