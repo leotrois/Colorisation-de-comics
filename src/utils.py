@@ -5,7 +5,7 @@ import cv2 as cv
 from concurrent.futures import ThreadPoolExecutor
 from queue import Queue
 
-PATH = "/raid/home/automatants/soudre_leo/Mini_projet_Automatants/Dataset"
+PATH = "./Dataset"
 queue = Queue()
 
 def remove_BW(PATH = "./Dataset"):
@@ -62,4 +62,4 @@ def initialize_dataset():
     dataset.close()
 
 if __name__ == "__main__":
-    initialize dataset()
+    initialize_dataset()

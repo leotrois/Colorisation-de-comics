@@ -26,7 +26,7 @@ class down(nn.Module):
 class up(nn.Module):
     def __init__(self,in_channel,out_channel, activation = True) -> None:
         super().__init__()
-        self.activation = activation # Pour la dernière couche, on veut des valeurs entre -1 et 1
+        self.activation = activation 
         self.conv_transpose = nn.ConvTranspose2d(in_channels=in_channel,out_channels=out_channel, kernel_size=(2,2), stride=2)
         self.batch_norm = nn.BatchNorm2d(out_channel)
         if activation:
@@ -51,7 +51,7 @@ class up(nn.Module):
 
 
     
-class Unet_with_cat(nn.Module):
+class Unet(nn.Module):
     def __init__(self,nb_features) -> None:
         super().__init__()
         self.down1 = down(1,nb_features)  
@@ -67,17 +67,17 @@ class Unet_with_cat(nn.Module):
     
     def forward(self,x):
         x0 = x
-        x = self.down1(x) # (1,512,512) -> (64,256,256)
+        x = self.down1(x) 
         x1 = x
-        x = self.down2(x) # (64,256,256) -> (128,128,128)
+        x = self.down2(x)
         x2 = x
-        x = self.down3(x) # (128,128,128) -> (256,64,64)
+        x = self.down3(x) 
         x3 = x
-        x = self.down4(x) # (256,64,64) -> (512,32,32)
-        x = self.up1(x, x3) # (512,32,32) -> (256,64,64)
-        x = self.up2(x,x2) # (256,64,64) -> (128,128,128)
-        x = self.up3(x,x1) # (128,128,128) -> (64,256,256)
-        x = self.up4(x,x0) # (64,256,256) -> (3,512,512)
+        x = self.down4(x) 
+        x = self.up1(x, x3)
+        x = self.up2(x,x2) 
+        x = self.up3(x,x1) 
+        x = self.up4(x,x0) 
         return x
     
     def loss(self,real_images, fake_images, disc_pred):
@@ -92,23 +92,23 @@ class Unet_with_cat(nn.Module):
     
 class Discriminateur(nn.Module):
     
-    #Ne marche probablement pas, je n'ai pas réfléchi aux tailles et nombre de canaux
     def __init__(self, nb_features) -> None:
         super().__init__()
         self.down1 = down(4,nb_features)
         self.down2 = down(nb_features,nb_features*2)
         self.down3 = down(nb_features * 2, nb_features* 4)
         self.down4 = down(nb_features * 4, nb_features* 8)
-        self.down5 = down(nb_features * 8, 1) # On veut une grille de pixels
-        # En sortie on n'a pas un nombre car Patch Gan !!! Chaque pixel de l'image 
+        self.down5 = down(nb_features * 8, 1) 
+        
     def forward(self, x, y):
-        x = torch.cat([x,y], dim = 1) # (batch size, 256,256,channels*2)
+        x = torch.cat([x,y], dim = 1)
         x = self.down1(x) 
         x = self.down2(x)
         x = self.down3(x)
         x = self.down4(x)
         x = self.down5(x)
         return x
+    
     def loss(self,disc_real_output, disc_generated_output, bce_loss):
         
         real_loss = bce_loss(disc_real_output,torch.ones_like(disc_real_output))
@@ -122,7 +122,7 @@ class Pix2Pix(nn.Module):
     
     def __init__(self):
         super().__init__()
-        self.unet = Unet_with_cat(64)
+        self.unet = Unet(64)
         self.discriminateur = Discriminateur(32)
         self.optimizer_unet = torch.optim.Adam(self.unet.parameters())
         self.optimizer_discriminateur = torch.optim.Adam(self.discriminateur.parameters())
@@ -133,7 +133,6 @@ class Pix2Pix(nn.Module):
 
     def train_step(self, X_batch, Y_batch):
 
-        # On commence par entrainer le discriminateur
         self.discriminateur.zero_grad()
         
         fake_images = self.unet(X_batch)
@@ -145,7 +144,6 @@ class Pix2Pix(nn.Module):
         gan_loss.backward()
         self.optimizer_discriminateur.step()
         
-        # On entraine maintenant le générateur
         self.unet.zero_grad()
         fake_images = self.unet(X_batch)
         disc_fake_output = self.discriminateur(fake_images,X_batch)

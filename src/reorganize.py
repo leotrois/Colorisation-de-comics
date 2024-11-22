@@ -4,7 +4,6 @@ os.chdir("C:\\Users\\Léo\\Desktop\\Mini_projet_Automatants")
 
 PATH = "./Dataset"
 
-# cette fonction donne une bonne forme au dataset (normalement pas utile pour les GPA)
 
 for vol in tqdm(os.listdir(PATH)):
     try:

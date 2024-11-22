@@ -1,9 +1,7 @@
 from torch.utils.data import Dataset
-from torchvision.transforms import v2
-import pandas as pd
 import torchvision
 from torchvision.io import read_image, ImageReadMode
-#On crée un dataset custom à partir des images du dossier 'dataset'
+import pandas as pd
 
 
 class CustomDataset(Dataset):
