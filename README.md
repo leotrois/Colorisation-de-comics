@@ -1,10 +1,6 @@
 # Implémentation de Pix2Pix
 
 Ce projet est une implémentation du modèle Pix2Pix, un réseau de neurones pour la traduction d'images par paires, tel que décrit dans le papier "Image-to-Image Translation with Conditional Adversarial Networks" par Isola et al. Nous allons utiliser ce modèle pour colorer des images de comics.
-Sur l'image suivante, la première colonne représente l'image d'origine, la deuxième l'image en noir et blanc et la troisième la prédiction du modèle.
-
-![Results](images/results.jpg)
-
 ## Structure du projet
 
 - `train.py` : Script pour entraîner le modèle.
@@ -38,7 +34,12 @@ Sinon, vous pouvez utiliser un jeu de donnée qui a directement la forme suivant
 ### Jeu de donnée
 Par la suite, nous utilisons le jeu de donnée de comics des années 50 issu du papier ["The Amazing Mysteries of the Gutter: Drawing Inferences Between Panels in Comic Book Narratives"](https://arxiv.org/abs/1611.05118). Vous pouvez accéder au jeu de donnée via ce [lien](https://obj.umiacs.umd.edu/comics/index.html) (on utilise la version original panel images).
 ### Résultats
-Les résultats suivants sont obtenus pour un entrainement de XX epochs sur le modèle.
+Les résultats suivants sont obtenus pour un entrainement de 3 epochs sur le modèle.
+
+Sur l'image suivante, la première colonne représente l'image d'origine, la deuxième l'image en noir et blanc et la troisième la prédiction du modèle.
+
+![Results](images/results.jpg)
+
 ## Référence
 
 - [Pix2Pix Paper](https://arxiv.org/abs/1611.07004)
