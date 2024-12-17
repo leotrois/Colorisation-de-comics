@@ -29,6 +29,7 @@ Pour que le jeu de donnée soit compatible avec les fonction de création du jeu
 ![Data Tree](images/forme_jeu_donnee_avant_traitement.PNG)
 
 Sinon, vous pouvez utiliser un jeu de donnée qui a directement la forme suivante :
+
 ![Data Tree](images/forme_jeu_donnee.PNG)
 
 ### Jeu de donnée
